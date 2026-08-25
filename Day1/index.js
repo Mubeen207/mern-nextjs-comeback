@@ -23,3 +23,12 @@
 
 // let result = multiplay(a, b);
 // alert(result);
+
+const user = { namee: "Mubeen ul islam", work: "Developer" };
+console.log(user);
+
+const { namee, work } = user;
+console.log(namee + " is " + work);
+
+const upDatedUser = { ...user, active: true };
+console.log(upDatedUser);
