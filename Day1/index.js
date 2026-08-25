@@ -14,3 +14,12 @@
 
 // alert(result);
 
+let multiplay = (a, b) => {
+  return a * b;
+};
+
+let a = +prompt("Enter First Number");
+let b = +prompt("Enter Second Number");
+
+let result = multiplay(a, b);
+alert(result);
