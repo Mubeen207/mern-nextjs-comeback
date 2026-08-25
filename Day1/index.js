@@ -32,3 +32,21 @@
 
 // const upDatedUser = { ...user, active: true };
 // console.log(upDatedUser);
+
+let cars = [
+  "Suzuki Alto",
+  "Suzuki Cultus",
+  "Suzuki Wagon R",
+  "Toyota Corolla",
+  "Honda City",
+  "Honda Civic",
+  "Daihatsu Mira",
+  "KIA Sportage",
+  "Toyota Yaris",
+  "Changan Alsvin",
+];
+console.log(cars);
+
+let result = cars.find((carName) => carName === "Honda City");
+console.log(result);
+
