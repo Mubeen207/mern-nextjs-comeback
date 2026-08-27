@@ -1,0 +1,15 @@
+{
+  "name": "Ledger Smart Expense Tracker",
+  "short_name": "Ledger",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#dce9e4",
+  "theme_color": "#152b38",
+  "description": "A private, offline-first expense tracker.",
+  "icons": [{
+    "src": "icon.svg",
+    "sizes": "any",
+    "type": "image/svg+xml",
+    "purpose": "any maskable"
+  }]
+}

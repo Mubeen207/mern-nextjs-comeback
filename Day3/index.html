@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#152b38" />
+    <link rel="manifest" href="manifest.json" />
     <title>Ledger | Smart Expense Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,7 +20,7 @@
         <a class="brand" href="."
           ><span class="brand-mark">↗</span><span>ledger</span></a
         >
-        <span class="date-label" id="todayLabel"></span>
+        <div class="header-tools"><label class="file-button">Import JSON<input id="importInput" type="file" accept=".json,application/json" /></label><button class="header-button" id="exportButton" type="button">Export data</button><span class="date-label" id="todayLabel"></span></div>
       </header>
 
       <section class="hero">
@@ -48,6 +49,11 @@
           ><strong id="expense">Rs 0</strong
           ><span class="card-note">Money spent</span>
         </article>
+      </section>
+
+      <section class="insights-grid" aria-label="Analytics and budget">
+        <article class="analytics-panel"><div class="panel-heading"><div><span class="section-kicker">At a glance</span><h2>Money pulse</h2></div><span class="chart-legend"><i class="income-key"></i> Income <i class="expense-key"></i> Expense</span></div><div class="bar-chart" id="barChart"></div><div class="category-breakdown" id="categoryBreakdown"></div></article>
+        <article class="budget-panel"><div class="panel-heading"><div><span class="section-kicker">Monthly guardrail</span><h2>Set a budget</h2></div><span class="budget-icon">◌</span></div><label>Monthly budget limit<div class="amount-input"><span>Rs</span><input id="budgetInput" type="number" min="0" step="100" placeholder="50,000" /></div></label><p class="budget-status" id="budgetStatus">Set a limit to keep spending in check.</p><button class="secondary-button" id="saveBudgetButton" type="button">Save budget <span>↗</span></button></article>
       </section>
 
       <section class="content-grid">
@@ -132,7 +138,7 @@
               <option>Shopping</option>
               <option>Entertainment</option>
               <option>Other</option>
-            </select>
+            </select><label class="month-field">Month<input id="monthFilter" type="month" /></label>
           </div>
           <div
             id="transactionList"
@@ -141,6 +147,7 @@
           ></div>
         </section>
       </section>
+      <div class="modal-backdrop" id="confirmModal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><span class="modal-icon">!</span><h2 id="modalTitle">Clear your ledger?</h2><p>Are you sure you want to delete all transactions? This cannot be undone.</p><div class="modal-actions"><button class="secondary-button" id="cancelClear" type="button">Cancel</button><button class="danger-button" id="confirmClear" type="button">Delete all</button></div></div></div>
       <footer>
         <span class="status-dot"></span> Every small choice adds up.
       </footer>
