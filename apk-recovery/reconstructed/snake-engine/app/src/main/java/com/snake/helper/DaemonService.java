@@ -104,7 +104,7 @@ public class DaemonService extends Service {
     /**
      * Setup notification channel for Android 8.0+
      */
-    private void setupNotificationChannel(Context context, String channelId, 
+    private static void setupNotificationChannel(Context context, String channelId, 
             String channelName, String channelDescription) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = 
@@ -127,7 +127,7 @@ public class DaemonService extends Service {
     /**
      * Create a notification
      */
-    private Notification createNotification(Context context, String channelId,
+    private static Notification createNotification(Context context, String channelId,
             String title, String content) {
         Notification.Builder builder = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
             ? new Notification.Builder(context, channelId)

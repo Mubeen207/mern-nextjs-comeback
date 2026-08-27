@@ -1,0 +1,19 @@
+#Fri Aug 28 01:43:56 PKT 2026
+path.4=4/classes.dex
+path.3=14/classes.dex
+path.2=11/classes.dex
+path.1=0/classes.dex
+path.5=5/classes.dex
+path.0=classes.dex
+base.4=D\:\\mern-nextjs-comeback\\apk-recovery\\reconstructed\\snake-engine\\app\\build\\intermediates\\dex\\defaultDebug\\mergeProjectDexDefaultDebug\\4\\classes.dex
+base.3=D\:\\mern-nextjs-comeback\\apk-recovery\\reconstructed\\snake-engine\\app\\build\\intermediates\\dex\\defaultDebug\\mergeProjectDexDefaultDebug\\14\\classes.dex
+base.2=D\:\\mern-nextjs-comeback\\apk-recovery\\reconstructed\\snake-engine\\app\\build\\intermediates\\dex\\defaultDebug\\mergeProjectDexDefaultDebug\\11\\classes.dex
+base.1=D\:\\mern-nextjs-comeback\\apk-recovery\\reconstructed\\snake-engine\\app\\build\\intermediates\\dex\\defaultDebug\\mergeProjectDexDefaultDebug\\0\\classes.dex
+base.0=D\:\\mern-nextjs-comeback\\apk-recovery\\reconstructed\\snake-engine\\app\\build\\intermediates\\dex\\defaultDebug\\mergeExtDexDefaultDebug\\classes.dex
+renamed.3=classes4.dex
+renamed.2=classes3.dex
+renamed.1=classes2.dex
+renamed.0=classes.dex
+renamed.5=classes6.dex
+renamed.4=classes5.dex
+base.5=D\:\\mern-nextjs-comeback\\apk-recovery\\reconstructed\\snake-engine\\app\\build\\intermediates\\dex\\defaultDebug\\mergeProjectDexDefaultDebug\\5\\classes.dex

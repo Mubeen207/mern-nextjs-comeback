@@ -6,6 +6,10 @@ android {
     namespace = "com.snake"
     compileSdk = 35
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.snake"
         minSdk = 28
