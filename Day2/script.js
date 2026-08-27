@@ -1,11 +1,17 @@
 let inputValue = document.getElementById("inputFeild");
 let inputButton = document.getElementById("inputButton");
+let warrnigElement = document.getElemantById("warrnig");
 let tasks = [];
 let addInput = () => {
+  if (inputValue.value === "") {
+    warrnigElement.value = "Please Enter Task";
+    return;
+  }
   tasks.push({
     task: inputValue.value,
     id: idgenerator(),
   });
+  inputValue.value = "";
   console.log(tasks);
 };
 
