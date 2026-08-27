@@ -13,15 +13,27 @@ let addInput = () => {
     id: idgenerator(),
   });
   inputValue.value = "";
-  console.log(tasks);
+  pushTasks(tasks);
+};
 
+let pushTasks = (tasks) => {
   allTasksElement.innerHTML = tasks.map((task) => {
     return `<div id="${task.id}">
   <p>${task.task}</p>
-  <button>Delete</button>
+  <button onClick="deleteTask('${task.id}')">Delete</button>
   <button>Edit</button>
 </div>`;
   });
+};
+let deleteTask = (element) => {
+  console.log(element.id);
+
+  let updatedTasks = tasks.filter((task) => 
+    task.id !== element.id
+  );
+  console.log(tasks);
+  tasks = updatedTasks;
+  pushTasks(tasks);
 };
 
 let idgenerator = () => {
