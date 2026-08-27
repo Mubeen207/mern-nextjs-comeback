@@ -3,7 +3,7 @@ let inputButton = document.getElementById("inputButton");
 let warrnigElement = document.getElementById("warrnig");
 let allTasksElement = document.getElementById("allTasks");
 let tasks = [];
-let addInput = () => {
+let addTask = () => {
   if (inputValue.value === "") {
     warrnigElement.innerHTML = "Please Enter Task";
     return;
