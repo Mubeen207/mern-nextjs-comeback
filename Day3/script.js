@@ -1,9 +1,19 @@
+const appShell = document.getElementById("appShell");
+const pinGate = document.getElementById("pinGate");
+const pinForm = document.getElementById("pinForm");
+const pinInput = document.getElementById("pinInput");
+const pinTitle = document.getElementById("pinTitle");
+const pinDescription = document.getElementById("pinDescription");
+const pinSubmit = document.getElementById("pinSubmit");
+const pinStatus = document.getElementById("pinStatus");
 const form = document.getElementById("transactionForm");
 const titleInput = document.getElementById("titleInput");
 const amountInput = document.getElementById("amountInput");
+const currencyInput = document.getElementById("currencyInput");
 const typeInput = document.getElementById("typeInput");
 const categoryInput = document.getElementById("categoryInput");
 const submitButton = document.getElementById("submitButton");
+const cancelEditButton = document.getElementById("cancelEditButton");
 const warning = document.getElementById("warning");
 const transactionList = document.getElementById("transactionList");
 const recurringList = document.getElementById("recurringList");
@@ -17,129 +27,91 @@ const categoryFilter = document.getElementById("categoryFilter");
 const monthFilter = document.getElementById("monthFilter");
 const clearButton = document.getElementById("clearButton");
 const transactionCount = document.getElementById("transactionCount");
+const filterSummary = document.getElementById("filterSummary");
 const modal = document.getElementById("confirmModal");
+const importModal = document.getElementById("importModal");
 const transactionsKey = "ledger-transactions";
 const recurringKey = "ledger-recurring";
 const budgetKey = "ledger-budget";
-let transactions = loadArray(transactionsKey);
-let recurring = loadArray(recurringKey);
+const fxKey = "ledger-fx-rates";
+const pinKey = "ledger-pin-sha256";
+const themeKey = "ledger-theme";
+const currencies = { PKR: { symbol: "Rs", rate: 1 }, USD: { symbol: "$", rate: 278 }, EUR: { symbol: "€", rate: 300 }, AED: { symbol: "د.إ", rate: 75 } };
+let transactions;
+let recurring;
+let fxRates;
 let editId = null;
+let pendingImport = null;
+let idleTimer;
+let isUnlocked = false;
+let lastFocusedElement;
 
-const today = new Date();
-document.getElementById("todayLabel").textContent = new Intl.DateTimeFormat("en-US", { weekday: "long", month: "short", day: "numeric" }).format(today);
-recurringStart.value = localDateValue(today);
-document.getElementById("budgetInput").value = localStorage.getItem(budgetKey) || "";
-
-function loadArray(key) {
-  try {
-    const data = JSON.parse(localStorage.getItem(key));
-    return Array.isArray(data) ? data : [];
-  } catch { return []; }
-}
-function saveTransactions() { localStorage.setItem(transactionsKey, JSON.stringify(transactions)); }
-function saveRecurring() { localStorage.setItem(recurringKey, JSON.stringify(recurring)); }
+function readJSON(key, fallback) { try { const value = JSON.parse(localStorage.getItem(key)); return value ?? fallback; } catch { return fallback; } }
 function localDateValue(date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`; }
-function formatMoney(value) { return `Rs ${value.toLocaleString("en-PK", { maximumFractionDigits: 2 })}`; }
+function formatMoney(value) { return `Rs ${Number(value).toLocaleString("en-PK", { maximumFractionDigits: 2 })}`; }
+function formatOriginal(item) { const meta = currencies[item.currencyCode] || currencies.PKR; return `${meta.symbol} ${Number(item.originalAmount).toLocaleString("en-US", { maximumFractionDigits: 2 })}`; }
 function formatDate(value) { return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)); }
+function escapeHTML(value) { return String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]); }
 function monthKey(date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`; }
 function daysInMonth(year, monthIndex) { return new Date(year, monthIndex + 1, 0).getDate(); }
-function occurrenceDate(year, monthIndex, dayOfMonth) { return new Date(year, monthIndex, Math.min(dayOfMonth, daysInMonth(year, monthIndex)), 10, 0, 0, 0); }
-function nextOccurrence(target, dayOfMonth) { return occurrenceDate(target.getFullYear(), target.getMonth() + 1, dayOfMonth); }
+function occurrenceDate(year, monthIndex, day) { return new Date(year, monthIndex, Math.min(day, daysInMonth(year, monthIndex)), 10, 0, 0, 0); }
+function nextOccurrence(date, day) { return occurrenceDate(date.getFullYear(), date.getMonth() + 1, day); }
+function applyTheme(theme) { document.documentElement.dataset.theme = theme; document.getElementById("themeInput").value = theme; }
+	function sanitiseRates(raw) { const source = raw && typeof raw === "object" ? raw : {}; return { PKR: 1, USD: Number.isFinite(Number(source.USD)) && Number(source.USD) > 0 ? Number(source.USD) : currencies.USD.rate, EUR: Number.isFinite(Number(source.EUR)) && Number(source.EUR) > 0 ? Number(source.EUR) : currencies.EUR.rate, AED: Number.isFinite(Number(source.AED)) && Number(source.AED) > 0 ? Number(source.AED) : currencies.AED.rate }; }
+	function loadRates() { return sanitiseRates(readJSON(fxKey, {})); }
+	function loadRecords(key, normalizer) { const value = readJSON(key, []); return Array.isArray(value) ? value.map(normalizer) : []; }
+	function normaliseTransaction(item) { item = item && typeof item === "object" ? item : {}; const code = currencies[item.currencyCode] ? item.currencyCode : "PKR"; const originalAmount = Number(item.originalAmount ?? item.amount); const appliedFxRate = Number(item.appliedFxRate) > 0 ? Number(item.appliedFxRate) : code === "PKR" ? 1 : fxRates[code]; const amount = Number(item.amount ?? originalAmount * appliedFxRate); return { ...item, id: String(item.id || crypto.randomUUID()), title: String(item.title || "Untitled transaction").slice(0, 80), amount: Number.isFinite(amount) ? amount : 0, originalAmount: Number.isFinite(originalAmount) ? originalAmount : 0, currencyCode: code, appliedFxRate, type: item.type === "income" ? "income" : "expense", category: String(item.category || "Other"), date: item.date && !Number.isNaN(new Date(item.date).getTime()) ? item.date : new Date().toISOString() }; }
+	function normaliseRecurring(item) { item = item && typeof item === "object" ? item : {}; const transaction = normaliseTransaction(item); const day = Math.min(31, Math.max(1, Number(item.dayOfMonth) || new Date(transaction.date).getDate())); return { id: transaction.id, title: transaction.title, amount: transaction.amount, originalAmount: transaction.originalAmount, currencyCode: transaction.currencyCode, appliedFxRate: transaction.appliedFxRate, type: transaction.type, category: transaction.category, dayOfMonth: day, createdAt: item.createdAt || transaction.date, nextRunAt: item.nextRunAt || transaction.date }; }
+function saveTransactions() { try { localStorage.setItem(transactionsKey, JSON.stringify(transactions)); } catch { warning.textContent = "Storage is full. Export a backup and remove old records."; } }
+function saveRecurring() { try { localStorage.setItem(recurringKey, JSON.stringify(recurring)); } catch { warning.textContent = "Recurring rule could not be saved on this device."; } }
 
-function processRecurringTransactions(now = new Date()) {
-  let transactionsChanged = false;
-  let recurringChanged = false;
-  recurring.forEach((rule) => {
-    if (!rule.nextRunAt || !Number.isInteger(rule.dayOfMonth)) return;
-    let target = new Date(rule.nextRunAt);
-    if (Number.isNaN(target.getTime())) return;
-    let safety = 0;
-    while (!Number.isNaN(target.getTime()) && target <= now && safety < 2400) {
-      const occurrence = monthKey(target);
-      const alreadyGenerated = transactions.some((item) => item.recurringId === rule.id && item.recurringOccurrence === occurrence);
-      if (!alreadyGenerated) {
-        transactions.unshift({ title: rule.title, amount: rule.amount, type: rule.type, category: rule.category, id: crypto.randomUUID(), date: target.toISOString(), recurringId: rule.id, recurringOccurrence: occurrence });
-        transactionsChanged = true;
-      }
-      target = nextOccurrence(target, rule.dayOfMonth);
-      safety += 1;
-    }
-    if (target.toISOString() !== rule.nextRunAt) { rule.nextRunAt = target.toISOString(); recurringChanged = true; }
-  });
-  if (transactionsChanged) saveTransactions();
-  if (recurringChanged) saveRecurring();
-}
+async function hashPin(pin) { const bytes = new TextEncoder().encode(pin); const digest = await crypto.subtle.digest("SHA-256", bytes); return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join(""); }
+function showPinGate(setup) { pinGate.hidden = false; appShell.hidden = true; pinTitle.textContent = setup ? "Set your PIN" : "Unlock your ledger"; pinDescription.textContent = setup ? "Choose a 4-digit PIN for this device." : "Enter your 4-digit PIN to continue."; pinSubmit.innerHTML = setup ? "Create PIN <span>↗</span>" : "Unlock ledger <span>↗</span>"; pinInput.autocomplete = setup ? "new-password" : "current-password"; pinInput.value = ""; pinStatus.textContent = ""; requestAnimationFrame(() => pinInput.focus()); }
+	async function unlockApp() { isUnlocked = true; pinGate.hidden = true; appShell.hidden = false; fxRates = loadRates(); transactions = loadRecords(transactionsKey, normaliseTransaction); recurring = loadRecords(recurringKey, normaliseRecurring); processRecurringTransactions(); populateSettings(); renderAll(); resetIdleTimer(); }
+function purgeRenderedData() { transactionList.replaceChildren(); recurringList.replaceChildren(); document.getElementById("income").textContent = "Rs 0"; document.getElementById("expense").textContent = "Rs 0"; document.getElementById("balance").textContent = "Rs 0"; document.getElementById("barChart").replaceChildren(); document.getElementById("categoryBreakdown").replaceChildren(); titleInput.value = ""; amountInput.value = ""; }
+function clearMemoryAndLock() { isUnlocked = false; purgeRenderedData(); transactions = undefined; recurring = undefined; appShell.hidden = true; showPinGate(false); }
+async function bootstrapSecurity() { applyTheme(localStorage.getItem(themeKey) === "dark" ? "dark" : "light"); showPinGate(!localStorage.getItem(pinKey)); }
+	pinForm.addEventListener("submit", async (event) => { event.preventDefault(); const pin = pinInput.value.trim(); if (!/^\d{4}$/.test(pin)) { pinStatus.textContent = "Enter exactly 4 digits."; return; } try { const hash = await hashPin(pin); const stored = localStorage.getItem(pinKey); if (!stored) { localStorage.setItem(pinKey, hash); await unlockApp(); } else if (hash === stored) await unlockApp(); else { pinStatus.textContent = "That PIN is incorrect. Try again."; pinInput.select(); } } catch { pinStatus.textContent = "Secure PIN setup is unavailable in this browser."; } });
 
-function updateSummary() {
-  const scoped = transactions.filter(monthMatches);
-  const income = scoped.filter((item) => item.type === "income").reduce((sum, item) => sum + item.amount, 0);
-  const expense = scoped.filter((item) => item.type === "expense").reduce((sum, item) => sum + item.amount, 0);
-  document.getElementById("income").textContent = formatMoney(income);
-  document.getElementById("expense").textContent = formatMoney(expense);
-  document.getElementById("balance").textContent = formatMoney(income - expense);
-  document.querySelector(".balance-card").classList.toggle("negative", income - expense < 0);
-  updateAnalytics(scoped, income, expense);
-  updateBudget(expense);
-}
-function monthMatches(item) { return !monthFilter.value || item.date.slice(0, 7) === monthFilter.value; }
-function updateAnalytics(scoped, income, expense) {
-  const max = Math.max(income, expense, 1);
-  document.getElementById("barChart").innerHTML = `<div class="chart-column"><div class="bar income-bar" style="height:${Math.max(income / max * 100, 3)}%"><span>${formatMoney(income)}</span></div><small>Income</small></div><div class="chart-column"><div class="bar expense-bar" style="height:${Math.max(expense / max * 100, 3)}%"><span>${formatMoney(expense)}</span></div><small>Expense</small></div>`;
-  const categories = scoped.filter((item) => item.type === "expense").reduce((result, item) => { result[item.category] = (result[item.category] || 0) + item.amount; return result; }, {});
-  const ordered = Object.entries(categories).sort((a, b) => b[1] - a[1]);
-  const totalExpense = expense || 1;
-  document.getElementById("categoryBreakdown").innerHTML = ordered.length ? ordered.map(([category, value]) => `<div class="category-row"><span>${category}</span><div class="progress-track"><i style="width:${value / totalExpense * 100}%"></i></div><strong>${Math.round(value / totalExpense * 100)}%</strong></div>`).join("") : '<span class="analytics-empty">Add expenses to see category breakdown.</span>';
-}
-function updateBudget(expense) {
-  const budget = Number(document.getElementById("budgetInput").value);
-  const status = document.getElementById("budgetStatus");
-  status.classList.toggle("over-budget", budget > 0 && expense > budget);
-  status.textContent = budget > 0 ? (expense > budget ? `Budget exceeded by ${formatMoney(expense - budget)}.` : `${formatMoney(budget - expense)} remaining this month.`) : "Set a limit to keep spending in check.";
-}
-function renderTransactions() {
-  const searchTerm = searchInput.value.trim().toLowerCase();
-  const visible = transactions.filter((item) => monthMatches(item) && item.title.toLowerCase().includes(searchTerm) && (typeFilter.value === "all" || item.type === typeFilter.value) && (categoryFilter.value === "all" || item.category === categoryFilter.value));
-  transactionCount.textContent = visible.length;
-  clearButton.hidden = transactions.length === 0;
-  transactionList.innerHTML = "";
-  if (!visible.length) { transactionList.innerHTML = `<div class="empty-state"><strong>${transactions.length ? "No matching transactions" : "Your ledger is clear"}</strong>${transactions.length ? "Try a different search or filter." : "Add your first entry to see it here."}</div>`; } else visible.forEach((item) => {
-    const row = document.createElement("article"); row.className = `transaction ${item.type}`;
-    row.innerHTML = `<div><p class="transaction-title"></p><span class="transaction-meta">${item.category} · ${formatDate(item.date)}${item.recurringId ? " · Monthly" : ""}</span></div><strong class="transaction-amount">${item.type === "income" ? "+" : "-"} ${formatMoney(item.amount)}</strong><div class="actions"><button class="action-button" data-action="edit" data-id="${item.id}" type="button">Edit</button><button class="action-button delete" data-action="delete" data-id="${item.id}" type="button">Delete</button></div>`;
-    row.querySelector(".transaction-title").textContent = item.title; transactionList.appendChild(row);
-  });
-}
-function renderRecurring() {
-  recurringList.innerHTML = "";
-  recurring.forEach((rule) => { const row = document.createElement("div"); row.className = "recurring-item"; row.innerHTML = `<span class="recurring-dot">↻</span><p></p><small>Day ${rule.dayOfMonth} monthly</small><button class="action-button delete" data-recurring-id="${rule.id}" type="button">Remove</button>`; row.querySelector("p").textContent = rule.title; recurringList.appendChild(row); });
-}
-function resetForm() { editId = null; form.reset(); recurringOptions.hidden = true; recurringStart.value = localDateValue(new Date()); recurringDay.value = "1"; typeInput.value = "expense"; categoryInput.value = "Salary"; submitButton.innerHTML = "Add transaction <span>↗</span>"; warning.textContent = ""; }
+function processRecurringTransactions(now = new Date()) { let transactionsChanged = false; let recurringChanged = false; recurring.forEach((rule) => { if (!rule.nextRunAt || !Number.isInteger(rule.dayOfMonth)) return; let target = new Date(rule.nextRunAt); if (Number.isNaN(target.getTime())) return; let safety = 0; while (target <= now && safety < 2400) { const occurrence = monthKey(target); if (!transactions.some((item) => item.recurringId === rule.id && item.recurringOccurrence === occurrence)) { transactions.unshift({ title: rule.title, amount: rule.amount, originalAmount: rule.originalAmount, currencyCode: rule.currencyCode, appliedFxRate: rule.appliedFxRate, type: rule.type, category: rule.category, id: crypto.randomUUID(), date: target.toISOString(), recurringId: rule.id, recurringOccurrence: occurrence }); transactionsChanged = true; } target = nextOccurrence(target, rule.dayOfMonth); safety += 1; } if (target.toISOString() !== rule.nextRunAt) { rule.nextRunAt = target.toISOString(); recurringChanged = true; } }); if (transactionsChanged) saveTransactions(); if (recurringChanged) saveRecurring(); }
+function updateSummary() { const scoped = transactions.filter((item) => !monthFilter.value || item.date.slice(0, 7) === monthFilter.value); const income = scoped.filter((item) => item.type === "income").reduce((sum, item) => sum + item.amount, 0); const expense = scoped.filter((item) => item.type === "expense").reduce((sum, item) => sum + item.amount, 0); const balance = income - expense; document.getElementById("income").textContent = formatMoney(income); document.getElementById("expense").textContent = formatMoney(expense); document.getElementById("balance").textContent = formatMoney(balance); document.getElementById("balanceNote").textContent = monthFilter.value ? `${monthFilter.value} selected` : "All recorded time"; document.querySelector(".balance-card").classList.toggle("negative", balance < 0); updateAnalytics(scoped, income, expense); updateBudget(expense); }
+function updateAnalytics(scoped, income, expense) { const max = Math.max(income, expense, 1); document.getElementById("barChart").innerHTML = `<div class="chart-column"><div class="bar income-bar" style="height:${Math.max(income / max * 100, 3)}%"><span>${formatMoney(income)}</span></div><small>Income</small></div><div class="chart-column"><div class="bar expense-bar" style="height:${Math.max(expense / max * 100, 3)}%"><span>${formatMoney(expense)}</span></div><small>Expense</small></div>`; const categories = scoped.filter((item) => item.type === "expense").reduce((result, item) => { result[item.category] = (result[item.category] || 0) + item.amount; return result; }, {}); const ordered = Object.entries(categories).sort((a, b) => b[1] - a[1]); document.getElementById("categoryBreakdown").innerHTML = ordered.length ? ordered.map(([category, value]) => `<div class="category-row"><span>${escapeHTML(category)}</span><div class="progress-track"><i style="width:${value / (expense || 1) * 100}%"></i></div><strong>${Math.round(value / (expense || 1) * 100)}%</strong></div>`).join("") : '<span class="analytics-empty">Add expenses to see category breakdown.</span>'; }
+function updateBudget(expense) { const budget = Number(document.getElementById("budgetInput").value); const status = document.getElementById("budgetStatus"); const progress = document.getElementById("budgetProgress"); const ratio = budget > 0 ? Math.min(expense / budget * 100, 100) : 0; progress.style.width = `${ratio}%`; progress.classList.toggle("over-budget", budget > 0 && expense > budget); status.classList.toggle("over-budget", budget > 0 && expense > budget); status.textContent = budget > 0 ? (expense > budget ? `Budget exceeded by ${formatMoney(expense - budget)}.` : `${formatMoney(budget - expense)} remaining this month.`) : "Set a limit to keep spending in check."; }
+function renderTransactions() { const term = searchInput.value.trim().toLowerCase(); const visible = transactions.filter((item) => (!monthFilter.value || item.date.slice(0, 7) === monthFilter.value) && item.title.toLowerCase().includes(term) && (typeFilter.value === "all" || item.type === typeFilter.value) && (categoryFilter.value === "all" || item.category === categoryFilter.value)); transactionCount.textContent = visible.length; clearButton.hidden = transactions.length === 0; const active = [term && `Search: ${term}`, typeFilter.value !== "all" && typeFilter.options[typeFilter.selectedIndex].text, categoryFilter.value !== "all" && categoryFilter.value, monthFilter.value].filter(Boolean); filterSummary.hidden = active.length === 0; filterSummary.textContent = active.length ? `${active.join(" · ")} · ${visible.length} shown` : ""; transactionList.innerHTML = ""; if (!visible.length) { transactionList.innerHTML = `<div class="empty-state"><strong>${transactions.length ? "No matching transactions" : "Your ledger is clear"}</strong>${transactions.length ? "Try a different filter or month." : "Add your first entry to see it here."}</div>`; return; } const fragment = document.createDocumentFragment(); visible.forEach((item) => { const row = document.createElement("article"); row.className = `transaction ${item.type}`; row.innerHTML = `<div><p class="transaction-title"></p><span class="transaction-meta">${escapeHTML(item.category)} · ${formatDate(item.date)} · ${item.currencyCode}${item.recurringId ? " · Monthly" : ""}</span></div><strong class="transaction-amount"><span>${item.type === "income" ? "+" : "-"} ${formatOriginal(item)}</span><small>${formatMoney(item.amount)} base</small></strong><div class="actions"><button class="action-button" data-action="edit" data-id="${item.id}" type="button">Edit</button><button class="action-button delete" data-action="delete" data-id="${item.id}" type="button">Delete</button></div>`; row.querySelector(".transaction-title").textContent = item.title; fragment.appendChild(row); }); transactionList.appendChild(fragment); }
+function renderRecurring() { recurringList.innerHTML = ""; recurring.forEach((rule) => { const row = document.createElement("div"); row.className = "recurring-item"; row.innerHTML = `<span class="recurring-dot">↻</span><p></p><small>Day ${rule.dayOfMonth} · ${rule.currencyCode}</small><button class="action-button delete" data-recurring-id="${rule.id}" type="button">Remove</button>`; row.querySelector("p").textContent = rule.title; recurringList.appendChild(row); }); }
+function renderAll() { updateSummary(); renderTransactions(); renderRecurring(); }
+function syncCurrencySymbol() { document.querySelector("#transactionForm .amount-input > span").textContent = currencies[currencyInput.value].symbol; }
+function resetForm() { editId = null; form.reset(); recurringOptions.hidden = true; recurringStart.value = localDateValue(new Date()); recurringDay.value = "1"; currencyInput.value = "PKR"; syncCurrencySymbol(); typeInput.value = "expense"; categoryInput.value = "Salary"; submitButton.innerHTML = "Add transaction <span>↗</span>"; cancelEditButton.hidden = true; document.getElementById("formHeading").textContent = "Track a transaction"; warning.textContent = ""; }
+function enterEdit(item) { editId = item.id; titleInput.value = item.title; amountInput.value = item.originalAmount; currencyInput.value = item.currencyCode; syncCurrencySymbol(); typeInput.value = item.type; categoryInput.value = item.category; submitButton.innerHTML = "Update transaction <span>↗</span>"; cancelEditButton.hidden = false; document.getElementById("formHeading").textContent = "Edit transaction"; titleInput.focus(); }
 
+currencyInput.addEventListener("change", syncCurrencySymbol);
 recurringInput.addEventListener("change", () => { recurringOptions.hidden = !recurringInput.checked; });
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const title = titleInput.value.trim(); const amount = Number(amountInput.value);
-  if (!title || !Number.isFinite(amount) || amount <= 0) { warning.textContent = "Please enter a description and a valid amount."; return; }
-  if (recurringInput.checked) {
-    const dayOfMonth = Number(recurringDay.value); const start = new Date(`${recurringStart.value}T10:00:00`);
-    if (!Number.isInteger(dayOfMonth) || dayOfMonth < 1 || dayOfMonth > 31 || Number.isNaN(start.getTime())) { warning.textContent = "Choose a valid start date and day from 1 to 31."; return; }
-    recurring.push({ id: crypto.randomUUID(), title, amount, type: typeInput.value, category: categoryInput.value, dayOfMonth, createdAt: new Date().toISOString(), nextRunAt: occurrenceDate(start.getFullYear(), start.getMonth(), dayOfMonth).toISOString() });
-    saveRecurring(); processRecurringTransactions(); resetForm(); renderRecurring(); updateSummary(); renderTransactions(); return;
-  }
-  const data = { title, amount, type: typeInput.value, category: categoryInput.value };
-  if (editId) transactions = transactions.map((item) => item.id === editId ? { ...item, ...data } : item); else transactions.unshift({ ...data, id: crypto.randomUUID(), date: new Date().toISOString() });
-  saveTransactions(); resetForm(); updateSummary(); renderTransactions();
-});
-transactionList.addEventListener("click", (event) => { const button = event.target.closest("button[data-action]"); if (!button) return; const item = transactions.find((transaction) => transaction.id === button.dataset.id); if (!item) return; if (button.dataset.action === "delete") { transactions = transactions.filter((transaction) => transaction.id !== item.id); if (editId === item.id) resetForm(); saveTransactions(); updateSummary(); renderTransactions(); } else { editId = item.id; titleInput.value = item.title; amountInput.value = item.amount; typeInput.value = item.type; categoryInput.value = item.category; submitButton.innerHTML = "Update transaction <span>↗</span>"; titleInput.focus(); } });
+form.addEventListener("submit", (event) => { event.preventDefault(); const title = titleInput.value.trim(); const originalAmount = Number(amountInput.value); if (!title || !Number.isFinite(originalAmount) || originalAmount <= 0) { warning.textContent = "Enter a description and an amount greater than zero."; return; } const code = currencyInput.value; const appliedFxRate = code === "PKR" ? 1 : fxRates[code]; const data = { title, originalAmount, currencyCode: code, appliedFxRate, amount: originalAmount * appliedFxRate, type: typeInput.value, category: categoryInput.value }; if (editId) transactions = transactions.map((item) => item.id === editId ? { ...item, ...data } : item); else if (recurringInput.checked) { const day = Number(recurringDay.value); const start = new Date(`${recurringStart.value}T10:00:00`); if (!Number.isInteger(day) || day < 1 || day > 31 || Number.isNaN(start.getTime())) { warning.textContent = "Choose a valid start date and a day from 1 to 31."; return; } recurring.push({ ...data, id: crypto.randomUUID(), dayOfMonth: day, createdAt: new Date().toISOString(), nextRunAt: occurrenceDate(start.getFullYear(), start.getMonth(), day).toISOString() }); saveRecurring(); processRecurringTransactions(); } else transactions.unshift({ ...data, id: crypto.randomUUID(), date: new Date().toISOString() }); saveTransactions(); resetForm(); renderAll(); });
+cancelEditButton.addEventListener("click", resetForm);
+transactionList.addEventListener("click", (event) => { const button = event.target.closest("button[data-action]"); if (!button) return; const item = transactions.find((transaction) => transaction.id === button.dataset.id); if (!item) return; if (button.dataset.action === "edit") enterEdit(item); else { const row = button.closest(".transaction"); row.classList.add("is-deleting"); setTimeout(() => { transactions = transactions.filter((transaction) => transaction.id !== item.id); if (editId === item.id) resetForm(); saveTransactions(); renderAll(); }, 220); } });
 recurringList.addEventListener("click", (event) => { const button = event.target.closest("[data-recurring-id]"); if (!button) return; recurring = recurring.filter((rule) => rule.id !== button.dataset.recurringId); saveRecurring(); renderRecurring(); });
-[searchInput, typeFilter, categoryFilter, monthFilter].forEach((control) => control.addEventListener("input", () => { updateSummary(); renderTransactions(); }));
-document.getElementById("saveBudgetButton").addEventListener("click", () => { const value = Number(document.getElementById("budgetInput").value); if (value < 0 || !Number.isFinite(value)) return; localStorage.setItem(budgetKey, value || ""); updateBudget(scopedTransactions().filter((item) => item.type === "expense").reduce((sum, item) => sum + item.amount, 0)); });
-function scopedTransactions() { return transactions.filter(monthMatches); }
-clearButton.addEventListener("click", () => { modal.hidden = false; document.getElementById("confirmClear").focus(); });
-document.getElementById("cancelClear").addEventListener("click", () => { modal.hidden = true; });
-document.addEventListener("keydown", (event) => { if (!modal.hidden && (event.key === "Escape" || event.key === "Backspace")) { event.preventDefault(); modal.hidden = true; } });
-document.getElementById("confirmClear").addEventListener("click", () => { transactions = []; resetForm(); saveTransactions(); modal.hidden = true; updateSummary(); renderTransactions(); });
-document.getElementById("exportButton").addEventListener("click", () => { const blob = new Blob([JSON.stringify(transactions, null, 2)], { type: "application/json" }); const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `ledger-backup-${new Date().toISOString().slice(0, 10)}.json`; link.hidden = true; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(link.href); });
-document.getElementById("importInput").addEventListener("change", (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const imported = JSON.parse(reader.result); if (!Array.isArray(imported) || imported.some((item) => !item.id || !item.title || !Number.isFinite(Number(item.amount)) || !["income", "expense"].includes(item.type))) throw new Error(); transactions = imported.map((item) => ({ ...item, amount: Number(item.amount) })); saveTransactions(); updateSummary(); renderTransactions(); warning.textContent = "Backup restored successfully."; } catch { warning.textContent = "This backup file is not valid."; } event.target.value = ""; }; reader.readAsText(file); });
+[searchInput, typeFilter, categoryFilter, monthFilter].forEach((control) => control.addEventListener("input", renderAll));
+document.getElementById("saveBudgetButton").addEventListener("click", () => { const value = Number(document.getElementById("budgetInput").value); if (!Number.isFinite(value) || value < 0) return; localStorage.setItem(budgetKey, value || ""); updateBudget(transactions.filter((item) => !monthFilter.value || item.date.slice(0, 7) === monthFilter.value).filter((item) => item.type === "expense").reduce((sum, item) => sum + item.amount, 0)); });
+
+function openModal(element) { lastFocusedElement = document.activeElement; element.hidden = false; element.querySelector("button")?.focus(); }
+function closeModal(element) { element.hidden = true; lastFocusedElement?.focus(); }
+clearButton.addEventListener("click", () => openModal(modal));
+document.getElementById("cancelClear").addEventListener("click", () => closeModal(modal));
+document.getElementById("confirmClear").addEventListener("click", () => { transactions = []; saveTransactions(); closeModal(modal); renderAll(); });
+document.querySelectorAll("[data-close-modal]").forEach((button) => button.addEventListener("click", () => closeModal(document.getElementById(button.dataset.closeModal))));
+document.addEventListener("keydown", (event) => { const openModalElement = [modal, importModal, document.getElementById("settingsModal")].find((element) => !element.hidden); if (!openModalElement) return; if (event.key === "Escape") { closeModal(openModalElement); return; } if (event.key === "Tab") { const focusable = [...openModalElement.querySelectorAll("button, input, select")].filter((element) => !element.disabled); if (!focusable.length) return; const first = focusable[0]; const last = focusable[focusable.length - 1]; if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); } else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); } } });
+
+function populateSettings() { document.getElementById("usdRate").value = fxRates.USD; document.getElementById("eurRate").value = fxRates.EUR; document.getElementById("aedRate").value = fxRates.AED; applyTheme(localStorage.getItem(themeKey) === "dark" ? "dark" : "light"); }
+document.getElementById("settingsButton").addEventListener("click", () => { populateSettings(); openModal(document.getElementById("settingsModal")); });
+document.getElementById("saveSettingsButton").addEventListener("click", () => { const values = { USD: Number(document.getElementById("usdRate").value), EUR: Number(document.getElementById("eurRate").value), AED: Number(document.getElementById("aedRate").value) }; if (Object.values(values).some((value) => !Number.isFinite(value) || value <= 0)) { document.getElementById("settingsStatus").textContent = "Enter valid positive rates."; return; } fxRates = { PKR: 1, ...values }; localStorage.setItem(fxKey, JSON.stringify(fxRates)); localStorage.setItem(themeKey, document.getElementById("themeInput").value); applyTheme(document.getElementById("themeInput").value); closeModal(document.getElementById("settingsModal")); });
+document.getElementById("lockNowButton").addEventListener("click", () => { closeModal(document.getElementById("settingsModal")); clearMemoryAndLock(); });
+document.getElementById("exportButton").addEventListener("click", () => { const backup = { version: 2, exportedAt: new Date().toISOString(), baseCurrency: "PKR", transactions, recurring, budget: localStorage.getItem(budgetKey) || "", fxRates }; const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" })); link.download = `ledger-backup-${localDateValue(new Date())}.json`; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(link.href); });
+document.getElementById("importInput").addEventListener("change", (event) => { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const raw = JSON.parse(reader.result); const importedTransactions = Array.isArray(raw) ? raw : raw.transactions; const importedRecurring = Array.isArray(raw) ? [] : raw.recurring; if (!Array.isArray(importedTransactions) || importedTransactions.some((item) => !item || !item.title || !Number.isFinite(Number(item.originalAmount ?? item.amount)) || !["income", "expense"].includes(item.type))) throw new Error(); pendingImport = { transactions: importedTransactions.map(normaliseTransaction), recurring: Array.isArray(importedRecurring) ? importedRecurring.map(normaliseRecurring) : [], budget: Array.isArray(raw) ? localStorage.getItem(budgetKey) || "" : raw.budget || "", fxRates: Array.isArray(raw) ? fxRates : sanitiseRates(raw.fxRates) }; document.getElementById("importDescription").textContent = `This backup contains ${pendingImport.transactions.length} transactions and ${pendingImport.recurring.length} recurring rules. Restore will replace current local data.`; openModal(importModal); } catch { warning.textContent = "This backup is invalid or missing required transaction fields."; } event.target.value = ""; }; reader.readAsText(file); });
+document.getElementById("cancelImport").addEventListener("click", () => { pendingImport = null; closeModal(importModal); });
+document.getElementById("confirmImport").addEventListener("click", () => { if (!pendingImport) return; transactions = pendingImport.transactions; recurring = pendingImport.recurring; fxRates = pendingImport.fxRates; localStorage.setItem(fxKey, JSON.stringify(fxRates)); localStorage.setItem(budgetKey, pendingImport.budget); saveTransactions(); saveRecurring(); pendingImport = null; closeModal(importModal); renderAll(); warning.textContent = "Backup restored successfully."; });
+
+function resetIdleTimer() { clearTimeout(idleTimer); if (isUnlocked) idleTimer = setTimeout(clearMemoryAndLock, 5 * 60 * 1000); }
+["click", "pointerdown", "scroll", "touchstart", "keydown"].forEach((eventName) => document.addEventListener(eventName, () => { if (isUnlocked && eventName !== "keydown") resetIdleTimer(); }, { passive: true }));
+
+bootstrapSecurity();
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) navigator.serviceWorker.register("sw.js").catch(() => {});
-processRecurringTransactions();
-updateSummary(); renderTransactions(); renderRecurring();

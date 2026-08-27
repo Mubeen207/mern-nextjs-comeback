@@ -4,160 +4,70 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#152b38" />
+    <meta name="description" content="A private, offline-first personal finance ledger." />
     <link rel="manifest" href="manifest.json" />
     <title>Ledger | Smart Expense Tracker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main class="app-shell">
+    <main class="app-shell" id="appShell" hidden>
       <header class="topbar">
-        <a class="brand" href="."
-          ><span class="brand-mark">↗</span><span>ledger</span></a
-        >
-        <div class="header-tools"><label class="file-button">Import JSON<input id="importInput" type="file" accept=".json,application/json" /></label><button class="header-button" id="exportButton" type="button">Export data</button><span class="date-label" id="todayLabel"></span></div>
+        <a class="brand" href="."><span class="brand-mark">↗</span><span>ledger</span></a>
+        <div class="header-tools">
+          <label class="file-button">Import JSON<input id="importInput" type="file" accept=".json,application/json" /></label>
+          <button class="header-button" id="exportButton" type="button">Export data</button>
+          <button class="header-button icon-only" id="settingsButton" type="button" aria-label="Open settings" title="Settings">⚙</button>
+          <span class="date-label" id="todayLabel"></span>
+        </div>
       </header>
 
       <section class="hero">
-        <div>
-          <p class="eyebrow">Personal finance, made visible</p>
-          <h1>Know where<br /><em>your money goes.</em></h1>
-        </div>
-        <p class="hero-copy">
-          Keep a clear record of every<br />rupee coming in and going out.
-        </p>
+        <div><p class="eyebrow">Private finance, made visible</p><h1>Know where<br /><em>your money goes.</em></h1></div>
+        <p class="hero-copy">A calm, clear record of every<br />rupee coming in and going out.</p>
       </section>
 
       <section class="summary-grid" aria-label="Financial summary">
-        <article class="summary-card balance-card">
-          <span class="card-label">Total balance</span
-          ><strong id="balance">Rs 0</strong
-          ><span class="card-note">Income minus expenses</span>
-        </article>
-        <article class="summary-card income-card">
-          <span class="card-label">Total income</span
-          ><strong id="income">Rs 0</strong
-          ><span class="card-note">Money received</span>
-        </article>
-        <article class="summary-card expense-card">
-          <span class="card-label">Total expense</span
-          ><strong id="expense">Rs 0</strong
-          ><span class="card-note">Money spent</span>
-        </article>
+        <article class="summary-card balance-card"><span class="card-label">Total balance</span><strong id="balance">Rs 0</strong><span class="card-note" id="balanceNote">Income minus expenses</span></article>
+        <article class="summary-card income-card"><span class="card-label">Total income</span><strong id="income">Rs 0</strong><span class="card-note">Money received</span></article>
+        <article class="summary-card expense-card"><span class="card-label">Total expense</span><strong id="expense">Rs 0</strong><span class="card-note">Money spent</span></article>
       </section>
 
       <section class="insights-grid" aria-label="Analytics and budget">
         <article class="analytics-panel"><div class="panel-heading"><div><span class="section-kicker">At a glance</span><h2>Money pulse</h2></div><span class="chart-legend"><i class="income-key"></i> Income <i class="expense-key"></i> Expense</span></div><div class="bar-chart" id="barChart"></div><div class="category-breakdown" id="categoryBreakdown"></div></article>
-        <article class="budget-panel"><div class="panel-heading"><div><span class="section-kicker">Monthly guardrail</span><h2>Set a budget</h2></div><span class="budget-icon">◌</span></div><label>Monthly budget limit<div class="amount-input"><span>Rs</span><input id="budgetInput" type="number" min="0" step="100" placeholder="50,000" /></div></label><p class="budget-status" id="budgetStatus">Set a limit to keep spending in check.</p><button class="secondary-button" id="saveBudgetButton" type="button">Save budget <span>↗</span></button></article>
+        <article class="budget-panel"><div class="panel-heading"><div><span class="section-kicker">Monthly guardrail</span><h2>Set a budget</h2></div><span class="budget-icon">◌</span></div><label>Monthly budget limit<div class="amount-input"><span>Rs</span><input id="budgetInput" type="number" min="0" step="100" inputmode="decimal" placeholder="50,000" /></div></label><div class="budget-progress"><span id="budgetProgress"></span></div><p class="budget-status" id="budgetStatus">Set a limit to keep spending in check.</p><button class="secondary-button" id="saveBudgetButton" type="button">Save budget <span>↗</span></button></article>
       </section>
 
       <section class="content-grid">
         <section class="form-panel" aria-label="Add transaction">
-          <div class="panel-heading">
-            <div>
-              <span class="section-kicker">New entry</span>
-              <h2>Track a transaction</h2>
-            </div>
-            <span class="plus-icon">+</span>
-          </div>
+          <div class="panel-heading"><div><span class="section-kicker">New entry</span><h2 id="formHeading">Track a transaction</h2></div><span class="plus-icon">+</span></div>
           <form id="transactionForm" novalidate>
-            <label
-              >Description<input
-                id="titleInput"
-                type="text"
-                maxlength="80"
-                placeholder="e.g. Monthly salary"
-            /></label>
-            <label
-              >Amount
-              <div class="amount-input">
-                <span>Rs</span
-                ><input
-                  id="amountInput"
-                  type="number"
-                  min="0.01"
-                  step="0.01"
-                  placeholder="0.00"
-                /></div
-            ></label>
-            <div class="two-fields">
-              <label
-                >Type<select id="typeInput">
-                  <option value="expense">Expense</option>
-                  <option value="income">Income</option>
-                </select></label
-              ><label
-                >Category<select id="categoryInput">
-                  <option>Salary</option>
-                  <option>Food</option>
-                  <option>Bills</option>
-                  <option>Shopping</option>
-                  <option>Entertainment</option>
-                  <option>Other</option>
-                </select></label
-              >
-            </div>
+            <label>Description<input id="titleInput" type="text" maxlength="80" placeholder="e.g. Monthly salary" autocomplete="off" /></label>
+            <label>Amount<div class="amount-input"><span>Rs</span><input id="amountInput" type="number" min="0.01" step="0.01" placeholder="0.00" inputmode="decimal" /></div></label>
+            <div class="two-fields"><label>Currency<select id="currencyInput"><option value="PKR">PKR · Rs</option><option value="USD">USD · $</option><option value="EUR">EUR · €</option><option value="AED">AED · د.إ</option></select></label><label>Type<select id="typeInput"><option value="expense">Expense</option><option value="income">Income</option></select></label></div>
+            <label>Category<select id="categoryInput"><option>Salary</option><option>Food</option><option>Bills</option><option>Shopping</option><option>Entertainment</option><option>Other</option></select></label>
             <label class="recurring-toggle"><input id="recurringInput" type="checkbox" /> Repeat this monthly</label>
-            <div class="recurring-options" id="recurringOptions" hidden>
-              <label>Start date<input id="recurringStart" type="date" /></label>
-              <label>Day of month<input id="recurringDay" type="number" min="1" max="31" value="1" /></label>
-            </div>
+            <div class="recurring-options" id="recurringOptions" hidden><label>Start date<input id="recurringStart" type="date" /></label><label>Day of month<input id="recurringDay" type="number" min="1" max="31" value="1" /></label></div>
             <p class="warning" id="warning" role="alert" aria-live="polite"></p>
-            <button class="primary-button" id="submitButton" type="submit">
-              Add transaction <span>↗</span>
-            </button>
+            <div class="form-actions"><button class="primary-button" id="submitButton" type="submit">Add transaction <span>↗</span></button><button class="secondary-button cancel-edit" id="cancelEditButton" type="button" hidden>Cancel edit</button></div>
           </form>
           <div class="recurring-list" id="recurringList"></div>
         </section>
 
         <section class="transactions-panel" aria-label="Transactions">
-          <div class="list-heading">
-            <div>
-              <span class="section-kicker">Activity</span>
-              <h2>Transactions <span id="transactionCount">0</span></h2>
-            </div>
-            <button class="text-button" id="clearButton" type="button" hidden>
-              Clear all
-            </button>
-          </div>
-          <div class="filters">
-            <label class="search-field"
-              ><span>⌕</span
-              ><input
-                id="searchInput"
-                type="search"
-                placeholder="Search transactions" /></label
-            ><select id="typeFilter" aria-label="Filter by type">
-              <option value="all">All transactions</option>
-              <option value="income">Only income</option>
-              <option value="expense">Only expense</option></select
-            ><select id="categoryFilter" aria-label="Filter by category">
-              <option value="all">All categories</option>
-              <option>Salary</option>
-              <option>Food</option>
-              <option>Bills</option>
-              <option>Shopping</option>
-              <option>Entertainment</option>
-              <option>Other</option>
-            </select><label class="month-field">Month<input id="monthFilter" type="month" /></label>
-          </div>
-          <div
-            id="transactionList"
-            class="transaction-list"
-            aria-live="polite"
-          ></div>
+          <div class="list-heading"><div><span class="section-kicker">Activity</span><h2>Transactions <span id="transactionCount">0</span></h2></div><button class="text-button" id="clearButton" type="button" hidden>Clear all</button></div>
+          <div class="filters"><label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Search transactions" /></label><select id="typeFilter" aria-label="Filter by type"><option value="all">All transactions</option><option value="income">Only income</option><option value="expense">Only expense</option></select><select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option>Salary</option><option>Food</option><option>Bills</option><option>Shopping</option><option>Entertainment</option><option>Other</option></select><label class="month-field">Month<input id="monthFilter" type="month" /></label></div>
+          <div id="filterSummary" class="filter-summary" hidden></div>
+          <div id="transactionList" class="transaction-list" aria-live="polite"></div>
         </section>
       </section>
-      <div class="modal-backdrop" id="confirmModal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><span class="modal-icon">!</span><h2 id="modalTitle">Clear your ledger?</h2><p>Are you sure you want to delete all transactions? This cannot be undone.</p><div class="modal-actions"><button class="secondary-button" id="cancelClear" type="button">Cancel</button><button class="danger-button" id="confirmClear" type="button">Delete all</button></div></div></div>
-      <footer>
-        <span class="status-dot"></span> Every small choice adds up.
-      </footer>
+      <footer><span class="status-dot"></span> Private by default. Stored on this device.</footer>
     </main>
+
+    <section class="pin-gate" id="pinGate" hidden aria-live="polite"><div class="pin-card"><span class="lock-mark">⌑</span><p class="eyebrow" id="pinEyebrow">Private ledger</p><h1 id="pinTitle">Unlock your ledger</h1><p id="pinDescription">Enter your 4-digit PIN to continue.</p><form id="pinForm"><label class="sr-only" for="pinInput">4-digit PIN</label><input id="pinInput" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="current-password" placeholder="••••" /><button class="primary-button" type="submit" id="pinSubmit">Unlock ledger <span>↗</span></button></form><p class="pin-status" id="pinStatus" role="alert" aria-live="polite"></p></div></section>
+
+    <div class="modal-backdrop" id="settingsModal" hidden><div class="modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-heading"><div><span class="section-kicker">Preferences</span><h2 id="settingsTitle">Ledger settings</h2></div><button class="close-button" data-close-modal="settingsModal" type="button" aria-label="Close settings">×</button></div><div class="settings-section"><h3>Offline exchange rates</h3><p>Rates are saved locally and frozen into each transaction.</p><div class="rate-grid"><label>1 USD = Rs<input id="usdRate" type="number" min="0.01" step="0.01" /></label><label>1 EUR = Rs<input id="eurRate" type="number" min="0.01" step="0.01" /></label><label>1 AED = Rs<input id="aedRate" type="number" min="0.01" step="0.01" /></label></div></div><div class="settings-section"><h3>Appearance</h3><label>Color mode<select id="themeInput"><option value="light">Light</option><option value="dark">Dark</option></select></label></div><div class="settings-section"><h3>Privacy</h3><button class="secondary-button" id="lockNowButton" type="button">Lock ledger now <span>⌑</span></button></div><p class="settings-status" id="settingsStatus" role="status"></p><div class="modal-actions"><button class="secondary-button" data-close-modal="settingsModal" type="button">Cancel</button><button class="primary-button modal-save" id="saveSettingsButton" type="button">Save settings <span>↗</span></button></div></div></div>
+    <div class="modal-backdrop" id="confirmModal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><span class="modal-icon">!</span><h2 id="modalTitle">Clear your ledger?</h2><p>Are you sure you want to delete all transactions? This cannot be undone.</p><div class="modal-actions"><button class="secondary-button" id="cancelClear" type="button">Cancel</button><button class="danger-button" id="confirmClear" type="button">Delete all</button></div></div></div>
+    <div class="modal-backdrop" id="importModal" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="importTitle"><span class="modal-icon">↥</span><h2 id="importTitle">Restore this backup?</h2><p id="importDescription">This will replace the current local ledger, recurring rules and budget with the backup contents.</p><div class="modal-actions"><button class="secondary-button" id="cancelImport" type="button">Cancel</button><button class="danger-button" id="confirmImport" type="button">Restore backup</button></div></div></div>
     <script src="script.js"></script>
   </body>
 </html>
