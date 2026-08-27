@@ -3,12 +3,21 @@ let inputButton = document.getElementById("inputButton");
 let warrnigElement = document.getElementById("warrnig");
 let allTasksElement = document.getElementById("allTasks");
 let tasks = [];
+let isEditId = "";
 let addTask = () => {
   if (inputValue.value === "") {
     warrnigElement.innerHTML = "Please Enter Task";
     return;
   }
   warrnigElement.innerHTML = "";
+  if (isEditId !== "") {
+    inputButton.innerHTML = "Add";
+    tasks = tasks.map((item) => {
+      if (isEditId === item.id) {
+        return { ...item, task: inputValue.value };
+      }
+    });
+  }
   tasks.push({
     task: inputValue.value,
     id: idgenerator(),
@@ -22,22 +31,26 @@ let pushTasks = (tasks) => {
     return `<div id="${task.id}">
   <p>${task.task}</p>
   <button onClick="deleteTask('${task.id}')">Delete</button>
-  <button>Edit</button>
+  <button onClick="editTask('${task.id}')">Edit</button>
 </div>`;
   });
 };
 let deleteTask = (id) => {
-  console.log(id);
-
   let updatedTasks = tasks.filter((task) => task.id !== id);
   console.log(tasks);
   tasks = updatedTasks;
   pushTasks(tasks);
 };
 
-let editTask = () => {
-  
-}
+let editTask = (id) => {
+  isEditId = id;
+  inputButton.innerHTML = "Update";
+  tasks.map((item) => {
+    if (item.id === id) {
+      return (inputValue.value = item.task);
+    }
+  });
+};
 
 let idgenerator = () => {
   const chars =
