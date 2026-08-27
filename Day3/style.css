@@ -224,6 +224,14 @@ select:focus {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
+.recurring-toggle { display: flex; align-items: center; gap: 8px; margin-top: 16px; color: var(--ink); cursor: pointer; }
+.recurring-toggle input { width: 15px; height: 15px; margin: 0; accent-color: var(--green); }
+.recurring-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.recurring-options[hidden] { display: none; }
+.recurring-options label { margin-top: 12px; }
+.recurring-list { display: grid; gap: 7px; margin-top: 17px; }
+.recurring-item { display: grid; grid-template-columns: auto 1fr auto auto; gap: 8px; align-items: center; padding: 9px 10px; color: var(--muted); background: #edf4ed; border-radius: 7px; font-size: 11px; }
+.recurring-item p { margin: 0; overflow-wrap: anywhere; color: var(--ink); font-weight: 700; }.recurring-item small { white-space: nowrap; }.recurring-dot { color: var(--green); font-size: 17px; }
 .warning {
   min-height: 17px;
   margin: 12px 0 0;
