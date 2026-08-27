@@ -1,10 +1,10 @@
 let inputValue = document.getElementById("inputFeild");
 let inputButton = document.getElementById("inputButton");
-let warrnigElement = document.getElemantById("warrnig");
+let warrnigElement = document.getElementById("warrnig");
 let tasks = [];
 let addInput = () => {
   if (inputValue.value === "") {
-    warrnigElement.value = "Please Enter Task";
+    warrnigElement.innerHTML = "Please Enter Task";
     return;
   }
   tasks.push({
