@@ -1,7 +1,5 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -68,43 +66,6 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-
-    // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-
-    // Flutter
-    implementation(files("flutter/flutter.jar"))
-
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
-    implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-installations-ktx")
-    implementation("com.google.firebase:firebase-common-ktx")
-    implementation("com.google.firebase:firebase-encoders-json")
-
-    // Google Play Services
-    implementation("com.google.android.gms:play-services-base:18.3.0")
-    implementation("com.google.android.gms:play-services-tasks:18.1.0")
-    implementation("com.google.android.gms:play-services-measurement-api:21.6.0")
-    implementation("com.google.android.gms:play-services-ads-identifier:18.0.0")
-
-    // Material Design
-    implementation("com.google.android.material:material:1.11.0")
-
-    // AndroidX
-    implementation("androidx.activity:activity-ktx:1.8.0")
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-
-    // Network
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
-
-    // Serialization
-    implementation("com.google.code.gson:gson:2.10.1")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

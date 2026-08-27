@@ -10,11 +10,6 @@ import android.content.Context;
 public class App extends Application {
     public static Context applicationContext;
 
-    static {
-        // Load the native engine library
-        System.loadLibrary("engine");
-    }
-
     @Override
     public void attachBaseContext(Context context) {
         super.attachBaseContext(context);
@@ -32,7 +27,7 @@ public class App extends Application {
      * Initialize application components
      */
     private void initializeComponents() {
-        // Firebase initialization is handled by manifest providers
-        // Additional initialization can be done here
+        // The original APK loads libengine.so here. The recovered native binary
+        // is documented separately and is intentionally optional in this shell.
     }
 }

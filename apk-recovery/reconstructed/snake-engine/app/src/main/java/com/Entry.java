@@ -18,8 +18,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.snake.helper.DaemonService;
 import com.snake.helper.Native;
 
@@ -41,8 +39,6 @@ import java.util.zip.ZipOutputStream;
 public class Entry extends AppCompatActivity {
     public static final String TAG = "SnakeEngine";
     public static String lastResult;
-    public static FirebaseAnalytics firebaseAnalytics;
-
     private boolean cameraPermissionGranted = false;
 
     @Override
@@ -52,17 +48,8 @@ public class Entry extends AppCompatActivity {
         // Note: Flutter would set content view via FlutterActivity or FlutterFragmentActivity
         // For now, we're just initializing the necessary components
         
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        initializeFirebase();
         startDaemonService();
         setupNotificationChannels();
-    }
-
-    /**
-     * Initialize Firebase messaging
-     */
-    private void initializeFirebase() {
-        FirebaseMessaging.getInstance().subscribeToTopic("default");
     }
 
     /**
