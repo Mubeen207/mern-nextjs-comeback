@@ -1,6 +1,7 @@
 let inputValue = document.getElementById("inputFeild");
 let inputButton = document.getElementById("inputButton");
 let warrnigElement = document.getElementById("warrnig");
+let allTasksElement = document.getElementById("allTasks");
 let tasks = [];
 let addInput = () => {
   if (inputValue.value === "") {
@@ -13,6 +14,14 @@ let addInput = () => {
   });
   inputValue.value = "";
   console.log(tasks);
+
+  allTasksElement.innerHTML = tasks.map((task) => {
+    return `<div id="${task.id}">
+  <p>${task.task}</p>
+  <button>Delete</button>
+  <button>Edit</button>
+</div>`;
+  });
 };
 
 let idgenerator = () => {
