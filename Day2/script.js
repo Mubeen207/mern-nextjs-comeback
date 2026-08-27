@@ -19,5 +19,3 @@ let idgenerator = () => {
   }
   return id;
 };
-
-console.log(idgenerator());
