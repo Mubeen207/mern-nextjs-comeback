@@ -1,53 +1,150 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="theme-color" content="#152b38" />
-		<title>Ledger | Smart Expense Tracker</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-		<link rel="stylesheet" href="style.css" />
-	</head>
-	<body>
-		<main class="app-shell">
-			<header class="topbar">
-				<a class="brand" href="."><span class="brand-mark">↗</span><span>ledger</span></a>
-				<span class="date-label" id="todayLabel"></span>
-			</header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#152b38" />
+    <title>Ledger | Smart Expense Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="."
+          ><span class="brand-mark">↗</span><span>ledger</span></a
+        >
+        <span class="date-label" id="todayLabel"></span>
+      </header>
 
-			<section class="hero">
-				<div><p class="eyebrow">Personal finance, made visible</p><h1>Know where<br /><em>your money goes.</em></h1></div>
-				<p class="hero-copy">Keep a clear record of every<br />rupee coming in and going out.</p>
-			</section>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Personal finance, made visible</p>
+          <h1>Know where<br /><em>your money goes.</em></h1>
+        </div>
+        <p class="hero-copy">
+          Keep a clear record of every<br />rupee coming in and going out.
+        </p>
+      </section>
 
-			<section class="summary-grid" aria-label="Financial summary">
-				<article class="summary-card balance-card"><span class="card-label">Total balance</span><strong id="balance">Rs 0</strong><span class="card-note">Income minus expenses</span></article>
-				<article class="summary-card income-card"><span class="card-label">Total income</span><strong id="income">Rs 0</strong><span class="card-note">Money received</span></article>
-				<article class="summary-card expense-card"><span class="card-label">Total expense</span><strong id="expense">Rs 0</strong><span class="card-note">Money spent</span></article>
-			</section>
+      <section class="summary-grid" aria-label="Financial summary">
+        <article class="summary-card balance-card">
+          <span class="card-label">Total balance</span
+          ><strong id="balance">Rs 0</strong
+          ><span class="card-note">Income minus expenses</span>
+        </article>
+        <article class="summary-card income-card">
+          <span class="card-label">Total income</span
+          ><strong id="income">Rs 0</strong
+          ><span class="card-note">Money received</span>
+        </article>
+        <article class="summary-card expense-card">
+          <span class="card-label">Total expense</span
+          ><strong id="expense">Rs 0</strong
+          ><span class="card-note">Money spent</span>
+        </article>
+      </section>
 
-			<section class="content-grid">
-				<section class="form-panel" aria-label="Add transaction">
-					<div class="panel-heading"><div><span class="section-kicker">New entry</span><h2>Track a transaction</h2></div><span class="plus-icon">+</span></div>
-					<form id="transactionForm" novalidate>
-						<label>Description<input id="titleInput" type="text" maxlength="80" placeholder="e.g. Monthly salary" /></label>
-						<label>Amount<div class="amount-input"><span>Rs</span><input id="amountInput" type="number" min="0.01" step="0.01" placeholder="0.00" /></div></label>
-						<div class="two-fields"><label>Type<select id="typeInput"><option value="expense">Expense</option><option value="income">Income</option></select></label><label>Category<select id="categoryInput"><option>Salary</option><option>Food</option><option>Bills</option><option>Shopping</option><option>Entertainment</option><option>Other</option></select></label></div>
-						<p class="warning" id="warning" role="alert" aria-live="polite"></p>
-						<button class="primary-button" id="submitButton" type="submit">Add transaction <span>↗</span></button>
-					</form>
-				</section>
+      <section class="content-grid">
+        <section class="form-panel" aria-label="Add transaction">
+          <div class="panel-heading">
+            <div>
+              <span class="section-kicker">New entry</span>
+              <h2>Track a transaction</h2>
+            </div>
+            <span class="plus-icon">+</span>
+          </div>
+          <form id="transactionForm" novalidate>
+            <label
+              >Description<input
+                id="titleInput"
+                type="text"
+                maxlength="80"
+                placeholder="e.g. Monthly salary"
+            /></label>
+            <label
+              >Amount
+              <div class="amount-input">
+                <span>Rs</span
+                ><input
+                  id="amountInput"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="0.00"
+                /></div
+            ></label>
+            <div class="two-fields">
+              <label
+                >Type<select id="typeInput">
+                  <option value="expense">Expense</option>
+                  <option value="income">Income</option>
+                </select></label
+              ><label
+                >Category<select id="categoryInput">
+                  <option>Salary</option>
+                  <option>Food</option>
+                  <option>Bills</option>
+                  <option>Shopping</option>
+                  <option>Entertainment</option>
+                  <option>Other</option>
+                </select></label
+              >
+            </div>
+            <p class="warning" id="warning" role="alert" aria-live="polite"></p>
+            <button class="primary-button" id="submitButton" type="submit">
+              Add transaction <span>↗</span>
+            </button>
+          </form>
+        </section>
 
-				<section class="transactions-panel" aria-label="Transactions">
-					<div class="list-heading"><div><span class="section-kicker">Activity</span><h2>Transactions <span id="transactionCount">0</span></h2></div><button class="text-button" id="clearButton" type="button" hidden>Clear all</button></div>
-					<div class="filters"><label class="search-field"><span>⌕</span><input id="searchInput" type="search" placeholder="Search transactions" /></label><select id="typeFilter" aria-label="Filter by type"><option value="all">All transactions</option><option value="income">Only income</option><option value="expense">Only expense</option></select><select id="categoryFilter" aria-label="Filter by category"><option value="all">All categories</option><option>Salary</option><option>Food</option><option>Bills</option><option>Shopping</option><option>Entertainment</option><option>Other</option></select></div>
-					<div id="transactionList" class="transaction-list" aria-live="polite"></div>
-				</section>
-			</section>
-			<footer><span class="status-dot"></span> Every small choice adds up.</footer>
-		</main>
-		<script src="script.js"></script>
-	</body>
+        <section class="transactions-panel" aria-label="Transactions">
+          <div class="list-heading">
+            <div>
+              <span class="section-kicker">Activity</span>
+              <h2>Transactions <span id="transactionCount">0</span></h2>
+            </div>
+            <button class="text-button" id="clearButton" type="button" hidden>
+              Clear all
+            </button>
+          </div>
+          <div class="filters">
+            <label class="search-field"
+              ><span>⌕</span
+              ><input
+                id="searchInput"
+                type="search"
+                placeholder="Search transactions" /></label
+            ><select id="typeFilter" aria-label="Filter by type">
+              <option value="all">All transactions</option>
+              <option value="income">Only income</option>
+              <option value="expense">Only expense</option></select
+            ><select id="categoryFilter" aria-label="Filter by category">
+              <option value="all">All categories</option>
+              <option>Salary</option>
+              <option>Food</option>
+              <option>Bills</option>
+              <option>Shopping</option>
+              <option>Entertainment</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div
+            id="transactionList"
+            class="transaction-list"
+            aria-live="polite"
+          ></div>
+        </section>
+      </section>
+      <footer>
+        <span class="status-dot"></span> Every small choice adds up.
+      </footer>
+    </main>
+    <script src="script.js"></script>
+  </body>
 </html>
