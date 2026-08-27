@@ -1,0 +1,16 @@
+R_DEF: Internal format may change without notice
+local
+string app_description
+string app_name
+string daemon_channel_id
+string daemon_inner_channel_id
+string daemon_inner_notification_id
+string daemon_notification_id
+string default_process
+string engine_service_name
+string notification_channel_description
+string notification_channel_name
+string notification_text
+string notification_title
+style LaunchTheme
+style Theme.SnakeEngine

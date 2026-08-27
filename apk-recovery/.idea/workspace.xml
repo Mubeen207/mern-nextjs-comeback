@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="087ef27c-07a1-4958-b700-4ba63947ed18" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/.gradle/9.2.0/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/.gradle/9.2.0/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/app/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/Entry.java" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/Entry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/snake/helper/DaemonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/snake/helper/DaemonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/snake/helper/Native.java" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/snake/helper/Native.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/snake/helper/ProxyVpnService.java" beforeDir="false" afterPath="$PROJECT_DIR$/reconstructed/snake-engine/app/src/main/java/com/snake/helper/ProxyVpnService.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3IVvJTkXBhdwqzOJq4Zn8dNNLDF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/mern-nextjs-comeback/apk-recovery"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="087ef27c-07a1-4958-b700-4ba63947ed18" name="Changes" comment="" />
+      <created>1787862480219</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1787862480219</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -11,8 +11,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 
-import androidx.core.app.NotificationCompat;
-
 /**
  * Daemon service that maintains the app in the background
  * This service runs as a foreground service to prevent the app from being killed
@@ -131,7 +129,10 @@ public class DaemonService extends Service {
      */
     private Notification createNotification(Context context, String channelId,
             String title, String content) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+        Notification.Builder builder = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+            ? new Notification.Builder(context, channelId)
+            : new Notification.Builder(context);
+        builder
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)

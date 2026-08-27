@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.Binder;
 
-import androidx.annotation.Keep;
-
 /**
  * Native binding class for calling into libengine.so
  * This class contains JNI method declarations that interface with native C++ code
@@ -14,37 +12,27 @@ import androidx.annotation.Keep;
 public class Native {
     // Native method declarations - these are implemented in libengine.so
     
-    @Keep
     public static native void ac(Object obj, Object obj2);
 
-    @Keep
     public static native void aior(String str, String str2);
 
-    @Keep
     public static native void awl(String str);
 
-    @Keep
     public static native boolean chl(byte[] bArr);
 
-    @Keep
     public static native byte[] djp(int i);
 
-    @Keep
     public static native void eio();
 
-    @Keep
     public static native void i(int i);
 
-    @Keep
     public static native void ic(Context context);
 
-    @Keep
     public static native String ilil(int i);
 
     /**
      * Get application info for a package
      */
-    @Keep
     public static ApplicationInfo getApplicationInfo(Context context, String packageName) {
         try {
             return context.getPackageManager().getApplicationInfo(packageName, 0);
@@ -56,7 +44,6 @@ public class Native {
     /**
      * Get UID for a given process ID
      */
-    @Keep
     public static int gcuid(int i) {
         if ((i <= 0 || i >= 10000) && i <= 19999) {
             return i;
@@ -67,7 +54,6 @@ public class Native {
     /**
      * Retrieve locale information
      */
-    @Keep
     public static String il(String str) {
         // This would typically retrieve locale-specific information
         return str;
@@ -76,7 +62,6 @@ public class Native {
     /**
      * Native logging function
      */
-    @Keep
     public static void logIn(final String logMessage, final long timestamp) {
         final Activity activity = getCurrentActivity();
         if (activity != null) {
@@ -93,7 +78,6 @@ public class Native {
     /**
      * Get the current activity (placeholder)
      */
-    @Keep
     private static Activity getCurrentActivity() {
         // This would need to be implemented using proper activity tracking
         return null;

@@ -3,6 +3,9 @@ package com.snake.helper;
 import android.net.VpnService;
 import android.content.Intent;
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
+
+import com.snake.billing.DebugEntitlementManager;
 
 /**
  * VPN Service for the Snake Engine proxy
@@ -10,20 +13,22 @@ import android.os.IBinder;
  */
 public class ProxyVpnService extends VpnService {
     private static final String TAG = "ProxyVpnService";
+    private ParcelFileDescriptor vpnInterface;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // TODO: Implement VPN startup logic
-        // This would involve:
-        // 1. Building a VPN connection
-        // 2. Setting up routing
-        // 3. Handling packets
+        if (!DebugEntitlementManager.hasEntitlement(this, "vpn")
+                || VpnService.prepare(this) != null) {
+            stopSelf();
+            return START_NOT_STICKY;
+        }
+        establishVpnConnection();
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        // TODO: Cleanup VPN connection
+        stopVpnConnection();
         super.onDestroy();
     }
 
@@ -44,8 +49,7 @@ public class ProxyVpnService extends VpnService {
             // Add default route
             builder.addRoute("0.0.0.0", 0);
             
-            // Build and establish the connection
-            // Note: This is a simplified version - actual implementation would be more complex
+            vpnInterface = builder.establish();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,6 +59,13 @@ public class ProxyVpnService extends VpnService {
      * Stop the VPN connection
      */
     private void stopVpnConnection() {
-        // Cleanup resources
+        if (vpnInterface != null) {
+            try {
+                vpnInterface.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            vpnInterface = null;
+        }
     }
 }

@@ -1,0 +1,282 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.snake"
+4    android:versionCode="1"
+5    android:versionName="2.2.2" >
+6
+7    <uses-sdk
+7-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:5:5-7:41
+8        android:minSdkVersion="28"
+8-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:6:9-35
+9        android:targetSdkVersion="35" />
+9-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:7:9-38
+10
+11    <!-- Network and connectivity -->
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:10:5-67
+12-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:10:22-64
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:11:5-79
+13-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:11:22-76
+14    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+14-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:12:5-79
+14-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:12:22-76
+15    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+15-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:13:5-76
+15-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:13:22-73
+16    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+16-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:14:5-76
+16-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:14:22-73
+17
+18    <!-- VPN -->
+19    <uses-permission android:name="android.permission.BIND_VPN_SERVICE" />
+19-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:17:5-75
+19-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:17:22-72
+20
+21    <!-- Notifications -->
+22    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+22-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:20:5-77
+22-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:20:22-74
+23    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+23-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:21:5-77
+23-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:21:22-74
+24    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+24-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:22:5-87
+24-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:22:22-84
+25    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+25-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:23:5-89
+25-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:23:22-86
+26
+27    <!-- Storage -->
+28    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+28-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:26:5-80
+28-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:26:22-77
+29    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+29-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:27:5-81
+29-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:27:22-78
+30    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+30-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:28:5-82
+30-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:28:22-79
+31
+32    <!-- Camera -->
+33    <uses-permission android:name="android.permission.CAMERA" />
+33-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:31:5-65
+33-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:31:22-62
+34    <uses-permission android:name="android.permission.FLASHLIGHT" />
+34-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:32:5-69
+34-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:32:22-66
+35
+36    <!-- Location -->
+37    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+37-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:35:5-79
+37-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:35:22-76
+38    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+38-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:36:5-81
+38-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:36:22-78
+39
+40    <!-- Audio and sensors -->
+41    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+41-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:39:5-71
+41-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:39:22-68
+42    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+42-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:40:5-80
+42-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:40:22-77
+43    <uses-permission android:name="android.permission.VIBRATE" />
+43-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:41:5-66
+43-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:41:22-63
+44    <uses-permission android:name="android.permission.BODY_SENSORS" />
+44-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:42:5-71
+44-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:42:22-68
+45
+46    <!-- Device management -->
+47    <uses-permission android:name="android.permission.WAKE_LOCK" />
+47-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:45:5-68
+47-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:45:22-65
+48    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+48-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:46:5-75
+48-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:46:22-72
+49
+50    <!-- Firebase Cloud Messaging -->
+51    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+51-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:49:5-82
+51-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:49:22-79
+52
+53    <!-- Other -->
+54    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+54-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:52:5-71
+54-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:52:22-68
+55    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+55-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:53:5-77
+55-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:53:22-74
+56
+57    <!-- Features -->
+58    <uses-feature
+58-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:56:5-58:36
+59        android:name="android.hardware.camera"
+59-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:57:9-47
+60        android:required="false" />
+60-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:58:9-33
+61    <uses-feature
+61-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:59:5-61:36
+62        android:name="android.hardware.camera.autofocus"
+62-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:60:9-57
+63        android:required="false" />
+63-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:61:9-33
+64
+65    <!-- Custom permissions -->
+66    <permission
+66-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:64:5-66:47
+67        android:name="com.snake.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+67-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:65:9-74
+68        android:protectionLevel="signature" />
+68-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:66:9-44
+69
+70    <uses-permission android:name="com.snake.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+70-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:67:5-90
+70-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:67:22-87
+71
+72    <!-- Application definition -->
+73    <application
+73-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:70:5-133:19
+74        android:name="com.snake.App"
+74-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:71:9-37
+75        android:allowBackup="true"
+75-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:72:9-35
+76        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+76-->[androidx.core:core:1.12.0] C:\Users\CD\.gradle\caches\8.9\transforms\4be08d3829071bd5681b755c8b62214e\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
+77        android:debuggable="true"
+78        android:extractNativeLibs="false"
+79        android:icon="@android:drawable/ic_menu_compass"
+79-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:73:9-57
+80        android:label="@string/app_name"
+80-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:74:9-41
+81        android:supportsRtl="true"
+81-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:75:9-35
+82        android:theme="@style/Theme.SnakeEngine"
+82-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:76:9-49
+83        android:usesCleartextTraffic="true" >
+83-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:77:9-44
+84
+85        <!-- Main Flutter Activity -->
+86        <activity
+86-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:80:9-94:20
+87            android:name="com.Entry"
+87-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:81:13-37
+88            android:configChanges="fontScale|layoutDirection|density|smallestScreenSize|screenSize|uiMode|screenLayout|orientation|keyboardHidden|keyboard|locale"
+88-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:82:13-163
+89            android:exported="true"
+89-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:83:13-36
+90            android:hardwareAccelerated="true"
+90-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:84:13-47
+91            android:launchMode="singleTop"
+91-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:85:13-43
+92            android:screenOrientation="portrait"
+92-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:86:13-49
+93            android:taskAffinity=""
+93-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:87:13-36
+94            android:theme="@style/LaunchTheme"
+94-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:88:13-47
+95            android:windowSoftInputMode="adjustResize" >
+95-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:89:13-55
+96            <intent-filter>
+96-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:90:13-93:29
+97                <action android:name="android.intent.action.MAIN" />
+97-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:91:17-69
+97-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:91:25-66
+98
+99                <category android:name="android.intent.category.LAUNCHER" />
+99-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:92:17-77
+99-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:92:27-74
+100            </intent-filter>
+101        </activity>
+102
+103        <!-- Daemon Services -->
+104        <service
+104-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:97:9-106:19
+105            android:name="com.snake.helper.DaemonService"
+105-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:98:13-58
+106            android:enabled="true"
+106-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:99:13-35
+107            android:exported="false"
+107-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:100:13-37
+108            android:foregroundServiceType="dataSync"
+108-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:101:13-53
+109            android:process="@string/engine_service_name" >
+109-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:102:13-58
+110            <property
+110-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:103:13-105:48
+111                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+111-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:104:17-76
+112                android:value="snake_engine" />
+112-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:105:17-45
+113        </service>
+114        <service
+114-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:108:9-117:19
+115            android:name="com.snake.helper.DaemonService$DaemonInnerService"
+115-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:109:13-77
+116            android:enabled="true"
+116-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:110:13-35
+117            android:exported="false"
+117-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:111:13-37
+118            android:foregroundServiceType="dataSync"
+118-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:112:13-53
+119            android:process="@string/engine_service_name" >
+119-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:113:13-58
+120            <property
+120-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:103:13-105:48
+121                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+121-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:104:17-76
+122                android:value="snake_engine_inner" />
+122-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:105:17-45
+123        </service>
+124
+125        <!-- VPN Service -->
+126        <service
+126-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:120:9-131:19
+127            android:name="com.snake.helper.ProxyVpnService"
+127-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:121:13-60
+128            android:enabled="true"
+128-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:122:13-35
+129            android:exported="false"
+129-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:123:13-37
+130            android:permission="android.permission.BIND_VPN_SERVICE" >
+130-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:124:13-69
+131            <intent-filter>
+131-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:125:13-127:29
+132                <action android:name="android.net.VpnService" />
+132-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:126:17-65
+132-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:126:25-62
+133            </intent-filter>
+134
+135            <meta-data
+135-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:128:13-130:40
+136                android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
+136-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:129:17-73
+137                android:value="true" />
+137-->D:\mern-nextjs-comeback\apk-recovery\reconstructed\snake-engine\app\src\main\AndroidManifest.xml:130:17-37
+138        </service>
+139
+140        <provider
+140-->[androidx.emoji2:emoji2:1.2.0] C:\Users\CD\.gradle\caches\8.9\transforms\7c6f4a2d5acfd5acecb609355231e1a2\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+141            android:name="androidx.startup.InitializationProvider"
+141-->[androidx.emoji2:emoji2:1.2.0] C:\Users\CD\.gradle\caches\8.9\transforms\7c6f4a2d5acfd5acecb609355231e1a2\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+142            android:authorities="com.snake.androidx-startup"
+142-->[androidx.emoji2:emoji2:1.2.0] C:\Users\CD\.gradle\caches\8.9\transforms\7c6f4a2d5acfd5acecb609355231e1a2\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+143            android:exported="false" >
+143-->[androidx.emoji2:emoji2:1.2.0] C:\Users\CD\.gradle\caches\8.9\transforms\7c6f4a2d5acfd5acecb609355231e1a2\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+144            <meta-data
+144-->[androidx.emoji2:emoji2:1.2.0] C:\Users\CD\.gradle\caches\8.9\transforms\7c6f4a2d5acfd5acecb609355231e1a2\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+145                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+145-->[androidx.emoji2:emoji2:1.2.0] C:\Users\CD\.gradle\caches\8.9\transforms\7c6f4a2d5acfd5acecb609355231e1a2\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+146                android:value="androidx.startup" />
+146-->[androidx.emoji2:emoji2:1.2.0] C:\Users\CD\.gradle\caches\8.9\transforms\7c6f4a2d5acfd5acecb609355231e1a2\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+147            <meta-data
+147-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\CD\.gradle\caches\8.9\transforms\f134ca10fcd01222873b7b2e30dd6d10\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+148                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+148-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\CD\.gradle\caches\8.9\transforms\f134ca10fcd01222873b7b2e30dd6d10\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+149                android:value="androidx.startup" />
+149-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\CD\.gradle\caches\8.9\transforms\f134ca10fcd01222873b7b2e30dd6d10\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+150        </provider>
+151    </application>
+152
+153</manifest>

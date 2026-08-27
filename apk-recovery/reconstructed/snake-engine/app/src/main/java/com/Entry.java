@@ -15,11 +15,14 @@ import android.provider.MediaStore;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
+import android.widget.TextView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.snake.billing.DebugEntitlementManager;
 import com.snake.helper.DaemonService;
 import com.snake.helper.Native;
+import com.snake.helper.ProxyVpnService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,8 +39,9 @@ import java.util.zip.ZipOutputStream;
  * This activity bridges Flutter UI with native Android functionality
  * Note: In a real Flutter project, this would be auto-generated
  */
-public class Entry extends AppCompatActivity {
+public class Entry extends android.app.Activity {
     public static final String TAG = "SnakeEngine";
+    private static final int VPN_PREPARE_REQUEST = 2001;
     public static String lastResult;
     private boolean cameraPermissionGranted = false;
 
@@ -47,6 +51,23 @@ public class Entry extends AppCompatActivity {
         
         // Note: Flutter would set content view via FlutterActivity or FlutterFragmentActivity
         // For now, we're just initializing the necessary components
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(32, 64, 32, 32);
+
+        TextView status = new TextView(this);
+        status.setText("Snake Engine\n\nRecovered Android service shell\n"
+            + (DebugEntitlementManager.isDebugEntitlementActive()
+            ? "Local debug entitlement active."
+            : "Subscription entitlement is required."));
+        status.setTextSize(18.0f);
+        layout.addView(status);
+
+        Button connect = new Button(this);
+        connect.setText("Connect VPN");
+        connect.setOnClickListener(view -> prepareVpnConnection());
+        layout.addView(connect);
+        setContentView(layout);
         
         startDaemonService();
         setupNotificationChannels();
@@ -81,6 +102,37 @@ public class Entry extends AppCompatActivity {
                 channel.setDescription("Notifications from Snake Engine");
                 notificationManager.createNotificationChannel(channel);
             }
+        }
+    }
+
+    private void prepareVpnConnection() {
+        if (!DebugEntitlementManager.hasEntitlement(this, "vpn")) {
+            Toast.makeText(this, "An active entitlement is required.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent prepareIntent = android.net.VpnService.prepare(this);
+        if (prepareIntent != null) {
+            startActivityForResult(prepareIntent, VPN_PREPARE_REQUEST);
+        } else {
+            startVpnService();
+        }
+    }
+
+    private void startVpnService() {
+        Intent vpnIntent = new Intent(this, ProxyVpnService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(vpnIntent);
+        } else {
+            startService(vpnIntent);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == VPN_PREPARE_REQUEST && resultCode == RESULT_OK) {
+            startVpnService();
         }
     }
 
