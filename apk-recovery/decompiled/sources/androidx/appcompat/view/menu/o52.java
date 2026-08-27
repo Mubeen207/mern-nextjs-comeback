@@ -1,0 +1,30 @@
+package androidx.appcompat.view.menu;
+
+import android.os.RemoteException;
+/* loaded from: classes.dex */
+public final class o52 implements Runnable {
+    public final /* synthetic */ fb2 m;
+    public final /* synthetic */ k42 n;
+
+    public o52(k42 k42Var, fb2 fb2Var) {
+        this.n = k42Var;
+        this.m = fb2Var;
+    }
+
+    @Override // java.lang.Runnable
+    public final void run() {
+        at1 at1Var;
+        at1Var = this.n.d;
+        if (at1Var == null) {
+            this.n.l().G().a("Failed to send measurementEnabled to service");
+            return;
+        }
+        try {
+            pj0.i(this.m);
+            at1Var.C1(this.m);
+            this.n.g0();
+        } catch (RemoteException e) {
+            this.n.l().G().b("Failed to send measurementEnabled to the service", e);
+        }
+    }
+}

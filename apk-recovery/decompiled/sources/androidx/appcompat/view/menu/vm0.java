@@ -1,0 +1,43 @@
+package androidx.appcompat.view.menu;
+/* loaded from: classes.dex */
+public abstract class vm0 {
+    public static int A = 2131230997;
+    public static int B = 2131231001;
+    public static int C = 2131231087;
+    public static int D = 2131231095;
+    public static int E = 2131231096;
+    public static int F = 2131231141;
+    public static int G = 2131231142;
+    public static int H = 2131231144;
+    public static int I = 2131231145;
+    public static int J = 2131231146;
+    public static int K = 2131231147;
+    public static int L = 2131231148;
+    public static int M = 2131231149;
+    public static int a = 2131230816;
+    public static int b = 2131230827;
+    public static int c = 2131230834;
+    public static int d = 2131230855;
+    public static int e = 2131230856;
+    public static int f = 2131230902;
+    public static int g = 2131230951;
+    public static int h = 2131230952;
+    public static int i = 2131230953;
+    public static int j = 2131230956;
+    public static int k = 2131230958;
+    public static int l = 2131230959;
+    public static int m = 2131230961;
+    public static int n = 2131230968;
+    public static int o = 2131230973;
+    public static int p = 2131230975;
+    public static int q = 2131230976;
+    public static int r = 2131230977;
+    public static int s = 2131230978;
+    public static int t = 2131230981;
+    public static int u = 2131230982;
+    public static int v = 2131230983;
+    public static int w = 2131230984;
+    public static int x = 2131230985;
+    public static int y = 2131230988;
+    public static int z = 2131230995;
+}
