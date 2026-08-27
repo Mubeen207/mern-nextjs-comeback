@@ -8,6 +8,7 @@ let addTask = () => {
     warrnigElement.innerHTML = "Please Enter Task";
     return;
   }
+  warrnigElement.innerHTML = "";
   tasks.push({
     task: inputValue.value,
     id: idgenerator(),
@@ -25,16 +26,18 @@ let pushTasks = (tasks) => {
 </div>`;
   });
 };
-let deleteTask = (element) => {
-  console.log(element.id);
+let deleteTask = (id) => {
+  console.log(id);
 
-  let updatedTasks = tasks.filter((task) => 
-    task.id !== element.id
-  );
+  let updatedTasks = tasks.filter((task) => task.id !== id);
   console.log(tasks);
   tasks = updatedTasks;
   pushTasks(tasks);
 };
+
+let editTask = () => {
+  
+}
 
 let idgenerator = () => {
   const chars =
